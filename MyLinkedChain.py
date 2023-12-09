@@ -178,6 +178,9 @@ class LinkedChain:
         for waarde in waardes:
             self.insert(self.length + 1, waarde)
 
+""" 
+
+testcode:
 
 l = LinkedChain()
 print(l.isEmpty())
@@ -197,3 +200,5 @@ print(l.delete(0))
 print(l.save())
 print(l.delete(1))
 print(l.save())
+
+"""
