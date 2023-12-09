@@ -119,7 +119,9 @@ class MyStack:
         self.stack = waardes
 
 
-# Voorbeeldgebruik
+"""
+testcode:
+
 s = MyStack(5)
 print(s.isEmpty())
 print(s.getTop()[1])
@@ -138,3 +140,5 @@ print(s.pop()[0])
 print(s.save())
 print(s.getTop()[0])
 print(s.save())
+
+"""
