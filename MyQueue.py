@@ -132,7 +132,9 @@ class MyQueue:
         #indien er geen specifieke preconditie aanwezig was, dan heb ik deze niet genoteerd om zo mijn aantal lijnen code te berperken (of ik heb het weergegeven als 'Geen specifieke precondities').
 
 
+"""
 
+testcode:
 
 q = MyQueue(10)
 print(q.isEmpty())
@@ -151,3 +153,5 @@ print(q.dequeue()[0])
 print(q.save())
 print(q.getFront()[0])
 print(q.save())
+
+"""
