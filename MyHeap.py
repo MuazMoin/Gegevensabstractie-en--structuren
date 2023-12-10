@@ -11,218 +11,197 @@ def createHeapNode(key):
 class Heap:
     def __init__(self):
         self.root = None
-        self.size = 0
 
     def heapIsEmpty(self):
-        return self.root is None
+        if self.root is None:
+            return True
+        return False
+
+    def heapUp(self):
+        self._heapUp(self.root)
+        return True
+
+    def _heapUp(self, node):
+        if node.leftchild is not None:
+            if node.leftchild.key > node.key:
+                temp = node.key
+                node.key = node.leftchild.key
+                node.leftchild.key = temp
+        if node.rightchild is not None:
+            if node.rightchild.key > node.key:
+                temp = node.key
+                node.key = node.rightchild.key
+                node.rightchild.key = temp
+        if node.leftchild is not None:
+            self._heapUp(node.leftchild)
+        if node.rightchild is not None:
+            self._heapUp(node.rightchild)
+        return True
+
+    def trickleDown(self):
+        self._trickledown(self.root)
+        return True
+    def _trickledown(self, node):
+        if node.leftchild is None and node.rightchild is None:
+            return
+        if node.leftchild is not None and node.rightchild is None:
+            if node.leftchild.key > node.key:
+                temp = node.key
+                node.key = node.leftchild.key
+                node.leftchild.key = temp
+        if node.rightchild is not None and node.leftchild is None:
+            if node.rightchild.key > node.key:
+                temp = node.key
+                node.key = node.rightchild.key
+                node.rightchild.key = temp
+        if node.leftchild is not None:
+            self._trickledown(node.leftchild)
+        if node.rightchild is not None:
+            self._trickledown(node.rightchild)
+        return True
 
     def heapInsert(self, key):
         if self.heapIsEmpty():
             self.root = createHeapNode(key)
-            self.size += 1
             return True
-        else:
-            self.size += 1
-            return self.__insert(self.root, key)
+        node = createHeapNode(key)
+        current = self.root
 
-    def __insert(self, node, key):
-        if node.leftchild is None:
-            node.leftchild = createHeapNode(key)
-            node.leftchild.parent = node
-            self.__heapify_up(node.leftchild)
-            return True
-        elif node.rightchild is None:
-            node.rightchild = createHeapNode(key)
-            node.rightchild.parent = node
-            self.__heapify_up(node.rightchild)
-            return True
-        else:
-            if self.__insert(node.leftchild, key):
-                self.__heapify_up(node.leftchild)
-                return True
-            elif self.__insert(node.rightchild, key):
-                self.__heapify_up(node.rightchild)
-                return True
-            else:
-                return False
+        while current.leftchild is not None and current.rightchild is not None:
+            current = current.leftchild
+        if current.leftchild is None:
+            current.leftchild = node
+            node.parent = current
+        elif current.rightchild is None:
+            current.rightchild = node
+            node.parent = current
+        while not self.checkHeap():
+            self.heapUp()
+        return True
 
-    def __heapify_up(self, node):
-        while node.parent is not None and node.parent.key < node.key:
-            node.parent.key, node.key = node.key, node.parent.key
-            node = node.parent
+    def checkHeap(self):
+        result = self._checkheap(self.root)
+        return result
 
-    def __heapify_down(self, node):
-        while node.leftchild is not None or node.rightchild is not None:
-            maxchild = self.maxchild(node)
-            if maxchild.key > node.key:
-                maxchild.key, node.key = node.key, maxchild.key
-                node = maxchild
-            else:
-                break
-
-    def heapSort(self):
-        if self.heapIsEmpty():
-            return []
-        else:
-            result = []
-            while not self.heapIsEmpty():
-                result.append(self.heapDelete()[0])
-            return result
-
-    def maxchild(self, node):
-        if node.leftchild is None:
-            return node.rightchild
-        elif node.rightchild is None:
-            return node.leftchild
-        else:
-            if node.leftchild.key > node.rightchild.key:
-                return node.leftchild
-            else:
-                return node.rightchild
-
-    def heapDelete(self):
-        if self.heapIsEmpty():
-            return None, False
-        else:
-            self.size -= 1
-            return self.__delete(self.root)
-
-    def __delete(self, node):
-        if node.leftchild is None and node.rightchild is None:
-            if node.parent is None:
-                self.root = None
-            elif node.parent.leftchild == node:
-                node.parent.leftchild = None
-            else:
-                node.parent.rightchild = None
-            self.__heapify_down(self.root)  # Call heapify after deletion
-            return node.key, True
-        elif node.leftchild is None:
-            return self.__delete_single_child(node, node.rightchild)
-        elif node.rightchild is None:
-            return self.__delete_single_child(node, node.leftchild)
-        else:
-            return self.__delete_two_children(node)
-
-    def __delete_no_children(self, node):
-        if node.parent is None:
-            self.root = None
-        elif node.parent.leftchild == node:
-            node.parent.leftchild = None
-        else:
-            node.parent.rightchild = None
-        return node.key, True
-
-    def __delete_single_child(self, node, child):
-        if node.parent is None:
-            self.root = child
-            child.parent = None
-        elif node.parent.leftchild == node:
-            node.parent.leftchild = child
-            child.parent = node.parent
-        else:
-            node.parent.rightchild = child
-            child.parent = node.parent
-        return node.key, True
-
-    def __delete_two_children(self, node):
-        min_node = self.__find_min(node.rightchild)
-        node.key, min_node.key = min_node.key, node.key
-
-        # Adjust parent reference of the moved subtree
-        if min_node.parent.leftchild == min_node:
-            min_node.parent.leftchild = min_node.rightchild
-        else:
-            min_node.parent.rightchild = min_node.rightchild
-
-        # Adjust parent reference of the right child (if it exists)
-        if min_node.rightchild:
-            min_node.rightchild.parent = min_node.parent
-
-        # After the replacement, perform heapify_down
-        self.__heapify_down(min_node)
-
-        return self.__delete(min_node)
-
-    def __find_min(self, node):
-        while node.leftchild is not None:
-            node = node.leftchild
-        return node
-
-    def check(self):
-        if self.heapIsEmpty():
-            return True
-        else:
-            return self.__check(self.root)
-
-    def __check(self, node):
+    def _checkheap(self, node):
         if node.leftchild is None and node.rightchild is None:
             return True
-        elif node.leftchild is None:
-            return node.key >= node.rightchild.key and self.__check(node.rightchild)
-        elif node.rightchild is None:
-            return node.key >= node.leftchild.key and self.__check(node.leftchild)
-        else:
-            return node.key >= node.leftchild.key and node.key >= node.rightchild.key and self.__check(node.leftchild) and self.__check(node.rightchild)
-
-    def heapRetrieve(self):
-        if self.heapIsEmpty():
-            return None, False
-        else:
-            return self.root.key, True
-
-    def inorderTraverse(self, function):
-        if not self.heapIsEmpty():
-            self.__inorderTraverse(self.root, function)
-
-    def __inorderTraverse(self, node, function):
+        if node.leftchild is None and node.rightchild is not None:
+            node.leftchild = node.rightchild
+            node.rightchild = None
         if node.leftchild is not None:
-            self.__inorderTraverse(node.leftchild, function)
-        function(node.key)
+            if node.leftchild.key > node.key:
+                return False
         if node.rightchild is not None:
-            self.__inorderTraverse(node.rightchild, function)
+            if node.rightchild.key > node.key:
+                return False
+        if node.leftchild is not None:
+            answer = self._checkheap(node.leftchild)
+            if answer is False:
+                return False
+        if node.rightchild is not None:
+            answer = self._checkheap(node.rightchild)
+            if answer is False:
+                return False
+        return True
+
+    def _inorder(self, node):
+        if node is None:
+            return
+        self._inorder(node.leftchild)
+        print(node.key)
+        self._inorder(node.rightchild)
+
+
+    def inorder(self, func):
+        self._inorder(self.root)
+
+    def inorderTraverse(self, func):
+        self._inorderTraverse(self.root, func)
 
     def save(self):
-        if self.heapIsEmpty():
-            return None
-        else:
-            return self.__save(self.root)
+        return self.toDict(self.root)
 
-    def __save(self, node):
+    def toDict(self, node):
         if node is None:
             return None
-
-        result = {'root': node.key}
-
-        if node.leftchild is not None or node.rightchild is not None:
-            result['children'] = [self.__save(node.leftchild), self.__save(node.rightchild)]
-
-        return result
+        root = {"root": node.key}
+        leftTree = self.toDict(node.leftchild)
+        rightTree = self.toDict(node.rightchild)
+        if leftTree is not None or rightTree is not None:
+            root["children"] = [leftTree, rightTree]
+        return root
 
     def load(self, data):
         if data is None:
             self.root = None
         else:
             self.root = createHeapNode(data['root'])
-            self.__load(self.root, data['children'])
+            self._load(self.root, data.get('children'))
 
-    def __load(self, node, data):
+    def _load(self, node, data):
         if not data:
             return
 
         if data[0] is not None:
             node.leftchild = createHeapNode(data[0]['root'])
             node.leftchild.parent = node
-            self.__load(node.leftchild, data[0].get('children', []))
+            self._load(node.leftchild, data[0].get('children', []))
 
         if len(data) > 1 and data[1] is not None:
             node.rightchild = createHeapNode(data[1]['root'])
             node.rightchild.parent = node
-            self.__load(node.rightchild, data[1].get('children', []))
+            self._load(node.rightchild, data[1].get('children', []))
 
-    def getSize(self):
-        return self.size
+    def heapDelete(self):
+        if self.root is None:
+            return False, False
 
-    def getRoot(self):
-        return self.root
+        current = self.root
+        lefttree = self.root.leftchild
+        righttree = self.root.rightchild
+        delete = self.root.key
 
+        if lefttree is not None and righttree is None:
+            self.root = lefttree
+            return delete, True
+        elif righttree is not None and lefttree is None:
+            self.root = righttree
+            return delete, True
+
+        if current.rightchild.leftchild is None and current.rightchild.rightchild is None:
+            current = current.leftchild
+        while current.rightchild is not None:
+            current = current.rightchild
+        while current.leftchild is not None:
+            current = current.leftchild
+        if current.parent.leftchild.key == current.key:
+            current.parent.leftchild = None
+        else:
+            current.parent.rightchild = None
+        swap = current.key
+        self.root.key = swap
+
+        self.trickleDown()
+        while self.checkHeap() is False:
+            self.heapUp()
+        if self.root.leftchild is not None and self.root.rightchild is not None:
+            if self.root.leftchild.key < self.root.rightchild.key:
+                temp = self.root.leftchild.key
+                self.root.leftchild.key = self.root.rightchild.key
+                self.root.rightchild.key = temp
+
+        return delete, True
+
+"""
+
+testcode:
+
+t = Heap()
+t.load({'root': 3, 'children': [{'root': 2}, {'root': 1}]})
+t.heapInsert(5)
+t.heapInsert(4)
+result = t.heapDelete()
+print(t.save())
+
+"""
