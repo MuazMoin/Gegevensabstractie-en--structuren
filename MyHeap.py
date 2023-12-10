@@ -193,6 +193,27 @@ class Heap:
 
         return delete, True
 
+    def heapSort(self):
+        self._heapSort(self.root)
+        return True
+
+    def _heapSort(self, node):
+        if node is None:
+            return
+
+        left_child = node.leftchild
+        right_child = node.rightchild
+
+        if left_child and left_child.key > node.key:
+            node.key, left_child.key = left_child.key, node.key
+
+        if right_child and right_child.key > node.key:
+            node.key, right_child.key = right_child.key, node.key
+
+        self._heapSort(left_child)
+        self._heapSort(right_child)
+        return True
+
 """
 
 testcode:
