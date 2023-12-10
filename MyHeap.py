@@ -1,27 +1,83 @@
 class Node:
+    """
+    Represents a node in the heap.
+
+    Preconditie:
+    - 'key' moet een geldige waarde hebben.
+
+    Postconditie:
+    - Een nieuwe Node is aangemaakt met de opgegeven 'key'.
+    """
     def __init__(self, key):
         self.key = key
         self.leftchild = None
         self.rightchild = None
         self.parent = None
 
+
 def createHeapNode(key):
+    """
+    Creëert een nieuwe heap-node met de opgegeven 'key'.
+
+    Preconditie:
+    - 'key' moet een geldige waarde hebben.
+
+    Postconditie:
+    - Een nieuwe Node is aangemaakt met de opgegeven 'key'.
+    """
     return Node(key)
 
+
 class Heap:
+    """
+    Represents a binary heap.
+
+    Precondities:
+    - Geen
+
+    Postcondities:
+    - Een nieuwe heap is aangemaakt.
+    """
     def __init__(self):
         self.root = None
 
     def heapIsEmpty(self):
+        """
+        Controleert of de heap leeg is.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - Geeft True terug als de heap leeg is, anders False.
+        """
         if self.root is None:
             return True
         return False
 
     def heapUp(self):
+        """
+        Voert de heapUp-operatie uit op de heap.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - De heapUp-operatie is uitgevoerd.
+        """
         self._heapUp(self.root)
         return True
 
     def _heapUp(self, node):
+        """
+        Voert de heapUp-operatie uit op de opgegeven node.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - De heapUp-operatie is uitgevoerd op de opgegeven node.
+        """
         if node.leftchild is not None:
             if node.leftchild.key > node.key:
                 temp = node.key
@@ -39,9 +95,28 @@ class Heap:
         return True
 
     def trickleDown(self):
+        """
+        Voert de trickleDown-operatie uit op de heap.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - De trickleDown-operatie is uitgevoerd.
+        """
         self._trickledown(self.root)
         return True
+
     def _trickledown(self, node):
+        """
+        Voert de trickleDown-operatie uit op de opgegeven node.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - De trickleDown-operatie is uitgevoerd op de opgegeven node.
+        """
         if node.leftchild is None and node.rightchild is None:
             return
         if node.leftchild is not None and node.rightchild is None:
@@ -61,6 +136,15 @@ class Heap:
         return True
 
     def heapInsert(self, key):
+        """
+        Voegt een nieuwe node met de opgegeven 'key' toe aan de heap.
+
+        Precondities:
+        - 'key' moet een geldige waarde hebben.
+
+        Postcondities:
+        - Een nieuwe node met de opgegeven 'key' is aan de heap toegevoegd.
+        """
         if self.heapIsEmpty():
             self.root = createHeapNode(key)
             return True
@@ -80,10 +164,28 @@ class Heap:
         return True
 
     def checkHeap(self):
+        """
+        Controleert of de heap de heap-eigenschap behoudt.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - Geeft True terug als de heap de heap-eigenschap behoudt, anders False.
+        """
         result = self._checkheap(self.root)
         return result
 
     def _checkheap(self, node):
+        """
+        Controleert of de opgegeven node en zijn onderliggende nodes de heap-eigenschap behouden.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - Geeft True terug als de opgegeven node en zijn onderliggende nodes de heap-eigenschap behouden, anders False.
+        """
         if node.leftchild is None and node.rightchild is None:
             return True
         if node.leftchild is None and node.rightchild is not None:
@@ -106,23 +208,67 @@ class Heap:
         return True
 
     def _inorder(self, node):
+        """
+        Voert een inorder-traversal uit vanaf de opgegeven node.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - Voert een inorder-traversal uit en drukt de sleutels af.
+        """
         if node is None:
             return
         self._inorder(node.leftchild)
         print(node.key)
         self._inorder(node.rightchild)
 
-
     def inorder(self, func):
+        """
+        Voert een inorder-traversal uit vanaf de wortel van de heap.
+
+        Precondities:
+        - 'func' moet een geldige functie zijn.
+
+        Postcondities:
+        - Voert een inorder-traversal uit en past 'func' toe op elke sleutel.
+        """
         self._inorder(self.root)
 
     def inorderTraverse(self, func):
+        """
+        Voert een inorder-traversal uit vanaf de wortel van de heap.
+
+        Precondities:
+        - 'func' moet een geldige functie zijn.
+
+        Postcondities:
+        - Voert een inorder-traversal uit en past 'func' toe op elke sleutel.
+        """
         self._inorderTraverse(self.root, func)
 
     def save(self):
+        """
+        Geeft een dictionary-representatie van de heap terug.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - Geeft een dictionary-representatie van de heap terug.
+        """
         return self.toDict(self.root)
 
     def toDict(self, node):
+        """
+        Converteert de heap naar een dictionary.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - Geeft een dictionary-representatie van de opgegeven node en zijn onderliggende nodes terug.
+        """
         if node is None:
             return None
         root = {"root": node.key}
@@ -133,6 +279,15 @@ class Heap:
         return root
 
     def load(self, data):
+        """
+        Laadt de heap vanuit de opgegeven dictionary-representatie.
+
+        Precondities:
+        - 'data' moet een geldige dictionary zijn.
+
+        Postcondities:
+        - De heap is geladen vanuit de opgegeven dictionary.
+        """
         if data is None:
             self.root = None
         else:
@@ -140,6 +295,16 @@ class Heap:
             self._load(self.root, data.get('children'))
 
     def _load(self, node, data):
+        """
+        Laadt de heap vanuit de opgegeven dictionary-representatie, beginnend bij de opgegeven node.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+        - 'data' moet een geldige lijst zijn.
+
+        Postcondities:
+        - De heap is geladen vanuit de opgegeven dictionary.
+        """
         if not data:
             return
 
@@ -154,6 +319,15 @@ class Heap:
             self._load(node.rightchild, data[1].get('children', []))
 
     def heapDelete(self):
+        """
+        Verwijdert de wortel van de heap.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - Geeft een tuple terug van de verwijderde sleutel en True als de operatie is geslaagd, anders False.
+        """
         if self.root is None:
             return False, False
 
@@ -194,10 +368,28 @@ class Heap:
         return delete, True
 
     def heapSort(self):
+        """
+        Voert een heapsort uit op de heap.
+
+        Precondities:
+        - Geen
+
+        Postcondities:
+        - De heap is gesorteerd.
+        """
         self._heapSort(self.root)
         return True
 
     def _heapSort(self, node):
+        """
+        Voert een heapsort uit op de opgegeven node en zijn onderliggende nodes.
+
+        Precondities:
+        - 'node' moet een geldige node in de heap zijn.
+
+        Postcondities:
+        - De heap is gesorteerd.
+        """
         if node is None:
             return
 
@@ -213,6 +405,7 @@ class Heap:
         self._heapSort(left_child)
         self._heapSort(right_child)
         return True
+
 
 """
 
