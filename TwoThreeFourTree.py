@@ -396,7 +396,6 @@ class TwoThreeFourTreeNode:
         Als de wortel van de boom nu leeg is, is de hoogte van de boom met één verminderd.
 
         """
-        # deze functie heb ik gemaakt met iemand die nu in 2e bachelor zit. Ik heb hierbij ook gebruik gemaakt van stackoverflow en chatgpt om foute te vinden in mijn code en het eventueel op te lossen.
         if self.isEmpty():
             return False
 
