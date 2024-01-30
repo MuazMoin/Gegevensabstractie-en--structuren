@@ -7,6 +7,7 @@ def createTreeItem(key, val):
     - Het aangemaakte object bevat de opgegeven key en val."""
     return TreeItemType(key, val)
 
+
 class TreeItemType:
     def __init__(self, key, val=None):
         """Pre-conditie:
@@ -15,7 +16,6 @@ class TreeItemType:
         # Post-conditie:
         # - Een object van de klasse TreeItemType is aangemaakt.
         # - Het aangemaakte object heeft de opgegeven key en val-waarden toegewezen."""
-
 
         self.key = key
         self.val = val
@@ -40,7 +40,6 @@ class TreeItemType:
 
         return self.key == other.key
 
-
     def __str__(self):
         """Pre-conditie:
         - Geen specifieke pre-condities
@@ -52,7 +51,6 @@ class TreeItemType:
 
 
 class TwoThreeFourTreeNode:
-
 
     def __init__(self, item=None):
         """
@@ -95,6 +93,7 @@ class TwoThreeFourTreeNode:
         if len(self.children) == 0:
             return True
         return False
+
     def isSame(self, list1, list2):
         """
         Preconditie:
@@ -112,6 +111,9 @@ class TwoThreeFourTreeNode:
         return True
 
     def insertItem(self, insertTreeItemType):
+
+        # deze functie heb ik gemaakt samen met iemand die nu in 2e bachelor zit, want ik kreeg mijn insert niet helemaal werkende.
+
         """
         Precondities:
         - insertTreeItemType is een object van een type dat een attribuut 'key' heeft.
@@ -126,19 +128,17 @@ class TwoThreeFourTreeNode:
         if self.isEmpty():
             self.node = [insertTreeItemType]
             return True
-        # check if 4-Knoop
+
         if (len(self.node)) == 3:
-            # 4-Knoop
-            # Split 4-Knoop
+
             parent = self.parent
 
             if parent is None:
                 parent = TwoThreeFourTreeNode()
                 parent.node = [self.node[1]]
-                # Call recursive ?
-                # New function ?
+
                 self.parent = parent
-                # 2-knoop  -  2 Children   L and R
+
                 left = TwoThreeFourTreeNode()
                 left.node = [self.node[0]]
                 left.parent = parent
@@ -146,13 +146,13 @@ class TwoThreeFourTreeNode:
                 right = TwoThreeFourTreeNode()
                 right.node = [self.node[2]]
                 right.parent = parent
-                # L(eft), ML(eft), MR(ight), R(ight) child ?
+
                 parent.children.append(left)
                 parent.children.append(right)
-                # remove node. It is already splitted to Parent and Children
+
                 if len(self.children) > 0:
-                    self.children[0].parent=left
-                    self.children[1].parent=left
+                    self.children[0].parent = left
+                    self.children[1].parent = left
                     self.children[2].parent = right
                     self.children[3].parent = right
 
@@ -161,25 +161,22 @@ class TwoThreeFourTreeNode:
                     right.children.append(self.children[2])
                     right.children.append(self.children[3])
 
-                # call recursiveµ
                 if (insertTreeItemType.val > parent.node[0].val):
                     return right.insertItem(insertTreeItemType)
                 else:
                     return left.insertItem(insertTreeItemType)
 
-            elif len(self.parent.node)==1:
+            elif len(self.parent.node) == 1:
 
-                insertIndex=0
+                insertIndex = 0
                 if self.node[1].key < parent.node[0].key:
-                    insertIndex=0
-                else :
-                    insertIndex=1
-
+                    insertIndex = 0
+                else:
+                    insertIndex = 1
 
                 parent.node.append(self.node[1])
                 parent.node.sort()
 
-                # 3-knoop  -  up to 3 Children   L , M and R. After Split only 2
                 L3 = TwoThreeFourTreeNode()
                 L3.node = [self.node[0]]
                 L3.parent = parent
@@ -188,32 +185,27 @@ class TwoThreeFourTreeNode:
                 R3.node = [self.node[2]]
                 R3.parent = parent
 
-                # L(eft), ML(eft), MR(ight), R(ight) child ?
-                if insertIndex==0:
-                    parent.children.insert(0,L3)
-                    parent.children.insert(1,R3)
+                if insertIndex == 0:
+                    parent.children.insert(0, L3)
+                    parent.children.insert(1, R3)
                 else:
                     parent.children.append(L3)
                     parent.children.append(R3)
 
                 if len(self.children) > 0:
-
-                    self.children[0].parent=L3
-                    self.children[1].parent=L3
+                    self.children[0].parent = L3
+                    self.children[1].parent = L3
                     self.children[2].parent = R3
                     self.children[3].parent = R3
-
 
                     L3.children.append(self.children[0])
                     L3.children.append(self.children[1])
                     R3.children.append(self.children[2])
                     R3.children.append(self.children[3])
 
-                # remove node. It is already splitted to Parent and Children
                 self.children.clear()
 
-                # remove the splitted node
-                childIndex =-1
+                childIndex = -1
 
                 for i in range(len(self.parent.children)):
                     if self.isSame(self.parent.children[i].node, self.node):
@@ -229,16 +221,15 @@ class TwoThreeFourTreeNode:
                     return self.parent.children[2].insertItem(insertTreeItemType)
 
 
-            elif len(self.parent.node)==2:
-                # 4-knoop  -
-                # Split 4 Children by 2 and 2 too
-                insertIndex =0
+            elif len(self.parent.node) == 2:
+
+                insertIndex = 0
                 if self.node[1].key < parent.node[0].key:
-                    insetIndex=0
+                    insetIndex = 0
                 elif self.node[1].key < parent.node[1].key:
-                    insertIndex=1
+                    insertIndex = 1
                 else:
-                    insertIndex=2
+                    insertIndex = 2
 
                 parent.node.append(self.node[1])
                 parent.node.sort()
@@ -257,24 +248,19 @@ class TwoThreeFourTreeNode:
                     R4.children.append(self.children[2])
                     R4.children.append(self.children[3])
 
-                # L(eft), ML(eft), MR(ight), R(ight) child ?
-                if insertIndex==0:
-                    parent.children.insert(0,L4)
-                    parent.children.insert(1,R4)
-                elif insertIndex==1:
+                if insertIndex == 0:
+                    parent.children.insert(0, L4)
+                    parent.children.insert(1, R4)
+                elif insertIndex == 1:
                     parent.children.insert(1, L4)
                     parent.children.insert(2, R4)
                 else:
                     parent.children.append(L4)
                     parent.children.append(R4)
 
-                # remove node. It is already splitted to Parent and Children
                 self.children.clear()
-                #self.node.clear()
-                # self=parent
-                # call recursive
-                # Remove the splitted node from children list
-                childindex =-1
+
+                childindex = -1
 
                 for i in range(len(self.parent.children)):
                     if self.isSame(self.parent.children[i].node, self.node):
@@ -291,24 +277,15 @@ class TwoThreeFourTreeNode:
                 else:
                     return self.parent.children[3].insertItem(insertTreeItemType)
 
-
-        # call recursive now?
-            #if insertTreeItemType.val > self.node[-1].val:
-            #    return self.children[-1].insertItem(insertTreeItemType)
-        # Insert newItemNow to a blad
-        # If it is not a Blad, move to its children
-
         if self.isLeaf():
             self.node.append(insertTreeItemType)
             self.node.sort()
             return True
         else:
-            # Begin with the 1st child and check if it is smaller then every number in each node
             for i in range(len(self.node)):
                 if insertTreeItemType.key < self.node[i].key:
                     return self.children[i].insertItem(insertTreeItemType)
 
-            # Bigger than all children, then insert to last child
             return self.children[-1].insertItem(insertTreeItemType)
 
     def retrieveItem(self, searchKey):
@@ -354,6 +331,7 @@ class TwoThreeFourTreeNode:
                 self.children[i].inorderTraverse(functie)
                 functie(self.node[i].key)
             self.children[-1].inorderTraverse(functie)
+
     def save(self):
         """
         Precondities:
@@ -376,7 +354,6 @@ class TwoThreeFourTreeNode:
 
         return p
 
-
     def load(self, items):
 
         """
@@ -395,11 +372,10 @@ class TwoThreeFourTreeNode:
         roott = items.get("root")
         childrent = items.get("children", [])
 
-
         for nodeItems in roott:
-            self.insertItem( createTreeItem(nodeItems,nodeItems))
+            self.insertItem(createTreeItem(nodeItems, nodeItems))
 
-        if len(childrent)!=0:
+        if len(childrent) != 0:
             for child_data in childrent:
                 child = TwoThreeFourTreeNode()
                 self.children.append(child)
@@ -409,56 +385,56 @@ class TwoThreeFourTreeNode:
                 # Load Recursive
                 child.load(child_data)
 
-
     def deleteItem(self, searchKey):
+        """
+        Postcondities:
+
+        Het opgegeven element is verwijderd uit de 2-3-4 boom.
+        Indien nodig zijn knopen samengevoegd, gesplitst of herschikt om te voldoen aan de eigenschappen van een 2-3-4 boom.
+        De structuur van de 2-3-4 boom is correct hersteld.
+        Als een knoop nu minder dan 2 elementen heeft, is deze samengevoegd met een naburige knoop om de eigenschappen van de 2-3-4 boom te behouden.
+        Als de wortel van de boom nu leeg is, is de hoogte van de boom met één verminderd.
+
+        """
+        # deze functie heb ik gemaakt met iemand die nu in 2e bachelor zit. Ik heb hierbij ook gebruik gemaakt van stackoverflow en chatgpt om foute te vinden in mijn code en het eventueel op te lossen.
         if self.isEmpty():
             return False
-
 
         for i, item in enumerate(self.node):
             if item.key == searchKey:
 
-                ##  Check for 2-knoop
                 if (self.parent is not None) and (self.parent.parent is not None) and (len(self.parent.node)) == 1:
-                #if (self.parent is not None) and (len(self.parent.node)) == 1:
-                    # THis is a 2-knoop
-                    # Omvermen tot 3 of 4 knoop only thr nodes in the seatch path. Do not change all 2 knoops
-                    # total children > 5 then change to 3 knoop
-                    # else  change to 4 knoop
+
                     total = len(self.parent.node)
                     for k, citem in enumerate(self.parent.children):
                         total += len(citem.node)
 
                     if total > 5:
-                        # Change to 3 knoop
-                        #  Children jhas 2 and 3 nodes (or 3 and 2 nodes)
-                        # and call recursively to delete the node
-                        # tot 3 knoop
-                        #
+
                         if self.node[0].key > self.parent.node[0].key:
-                            # Index 1
-                            if len(self.node)> 2:
-                                # Split Child[1]
-                                self.parent.node.append(self.node[1])
 
-                                L3 = TwoThreeFourTreeNode()
-                                L3.node = [self.node[0]]
-                                L3.parent = self.parent
+                            if len(self.node) > 2:
 
-                                R3 = TwoThreeFourTreeNode()
-                                R3.node = [self.node[2]]
-                                R3.parent = self.parent
+                                    self.parent.node.append(self.node[1])
+                                    self.parent.node.sort()
 
-                                # L(eft), ML(eft), MR(ight), R(ight) child ?
-                                self.parent.children.insert(2, L3)
-                                self.parent.children.insert(3, R3)
-                                # Remove the splittes & merged node
-                                self.parent.children.pop(1)
-                                del self.node[1]
+                                    L3 = TwoThreeFourTreeNode()
+                                    L3.node = [self.node[0]]
+                                    L3.parent = self.parent
+
+                                    R3 = TwoThreeFourTreeNode()
+                                    R3.node = [self.node[2]]
+                                    R3.parent = self.parent
+
+                                    self.parent.children.pop(0)
+                                    self.parent.children.insert(0, R3)
+                                    self.parent.children.insert(0, L3)
+                                    del self.node[1]
 
                             else:
-                                # Split Child[0]
+
                                 self.parent.node.append(self.parent.children[0].node[1])
+                                self.parent.node.sort()
 
                                 L3 = TwoThreeFourTreeNode()
                                 L3.node = [self.parent.children[0].node[0]]
@@ -471,35 +447,16 @@ class TwoThreeFourTreeNode:
                                 self.parent.children.pop(0)
                                 self.parent.children.insert(0, R3)
                                 self.parent.children.insert(0, L3)
-                                # Remove the splittes & merged node
+
                                 del self.parent.children[0].node[1]
 
 
                         else:
-                            # Index 0
-                            if len(self.node) > 2:
-                                # Split Child[1]
-                                self.parent.node.append(self.node[1])
-                                self.parent.node.sort()
 
-                                L3 = TwoThreeFourTreeNode()
-                                L3.node = [self.node[0]]
-                                L3.parent = self.parent
+                            if len(self.node) < 2:
 
-                                R3 = TwoThreeFourTreeNode()
-                                R3.node = [self.node[2]]
-                                R3.parent = self.parent
-
-                                self.parent.children.pop(0)
-                                self.parent.children.insert(0, R3)
-                                self.parent.children.insert(0, L3)
-                                del self.node[1]
-
-                            else:
-                                # Split Child[0]
                                 self.parent.node.append(self.parent.children[1].node[1])
                                 self.parent.node.sort()
-
 
                                 L3 = TwoThreeFourTreeNode()
                                 L3.node = [self.parent.children[1].node[0]]
@@ -510,29 +467,71 @@ class TwoThreeFourTreeNode:
                                 R3.parent = self.parent
 
                                 self.parent.children.pop(1)
+                                self.parent.children.insert(1, R3)
                                 self.parent.children.insert(1, L3)
-                                self.parent.children.insert(2, R3)
 
                                 del self.parent.children[1].node[1]
-                        # End change to 3 knoop
-                        # Call recursire
-                        # It is already Blad.
-                        self.deleteItem(searchKey)
-                        return True
+
+                            else:
+
+                                self.parent.node.append(self.node[0])
+                                self.parent.node.sort()
+
+                                L3 = TwoThreeFourTreeNode()
+                                L3.node = [self.node[1]]
+                                L3.parent = self.parent
+
+                                R3 = TwoThreeFourTreeNode()
+                                R3.node = [self.parent.children[1].node[0]]
+                                R3.parent = self.parent
+
+                                self.parent.children.pop(1)
+                                self.parent.children.insert(1, R3)
+                                self.parent.children.insert(1, L3)
+
+                                del self.node[1]
 
                     else:
-                        # Change to 4 knoop
-                        # Call recursive again to delete the node
 
                         if self.parent.node[0].key < self.parent.parent.node[0].key:
-                            self.parent.parent.node.append(self.parent.node[0])
-                            self.parent.parent.node.append(self.parent.parent.children[1].node[0])
 
-                            self.parent.parent.node.sort()
-                            self.parent.parent.children.insert(2, self.parent.children[0])
-                            self.parent.parent.children.insert(3, self.parent.children[1])
-                            self.parent.parent.children.insert(4, self.parent.parent.children[0].children[0])
-                            self.parent.parent.children.insert(5, self.parent.parent.children[0].children[1])
+                                if len(self.parent.children[0].node) > 1:
+
+                                    self.parent.node.append(self.parent.children[0].node[0])
+                                    self.parent.node.sort()
+
+                                    L3 = TwoThreeFourTreeNode()
+                                    L3.node = [self.parent.children[0].node[1]]
+                                    L3.parent = self.parent
+
+                                    R3 = TwoThreeFourTreeNode()
+                                    R3.node = [self.parent.children[0].node[2]]
+                                    R3.parent = self.parent
+
+                                    self.parent.children.pop(0)
+                                    self.parent.children.insert(0, R3)
+                                    self.parent.children.insert(0, L3)
+
+                                    del self.parent.children[0].node[1]
+
+                                else:
+
+                                    self.parent.node.append(self.parent.parent.node[0])
+                                    self.parent.node.sort()
+
+                                    L3 = TwoThreeFourTreeNode()
+                                    L3.node = [self.parent.children[0].node[0]]
+                                    L3.parent = self.parent
+
+                                    R3 = TwoThreeFourTreeNode()
+                                    R3.node = [self.parent.children[0].node[2]]
+                                    R3.parent = self.parent
+
+                                    self.parent.children.pop(0)
+                                    self.parent.children.insert(0, R3)
+                                    self.parent.children.insert(0, L3)
+
+                                    del self.parent.children[0].node[1]
 
                         else:
                             self.parent.parent.node.append(self.parent.node[0])
@@ -555,69 +554,48 @@ class TwoThreeFourTreeNode:
 
                         parent.children.pop(0)
                         parent.children.pop(0)
-                        ##Swap
-                        # Swap is implemented down down for different use cases
-                        ## Call Recursive
 
-                        # It is already Blad.
                         self.deleteItem(searchKey)
                         return True
 
-                ##
-                ##  Swap and Removep part
                 if self.isLeaf():
-                    ## No need for a swap
-                    if len(self.node)>1:
-                        del self.node[i]
+
+                    if len(self.node) < 1:
+                        self.parent.children.remove(self)
                         return True
+
                     else:
-                        if len(self.parent.node)==1:
-                        # Ts is already changedd to 3 or 4 Knoop
-                        # this part to be removed safely after testing.
-                        #
+                        if len(self.node) > 1:
+                            del self.node[i]
 
-                            if len(self.parent.children[0].node) + len(self.parent.children[1].node) == 2:
-                                self.parent.node.append(self.parent.children[0].node[0])
-                                self.parent.node.append(self.parent.children[1].node[0])
+                        elif len(self.parent.node) == 1:
 
-                                for j, pitem in enumerate(self.parent.node):
-                                    if pitem.key == searchKey:
-                                        del self.parent.node[j]
-
-                                self.parent.children.clear()
-                                return True
-
-                            else:
                                 if self.node[0].key < self.parent.node[0].key:
-                                    self.node.clear()
-                                    self.node.append(self.parent.node[0])
+                                    self.parent.children[1].node.append(self.parent.node[0])
+                                    self.parent.children[1].node.sort()
                                     del self.parent.node[0]
-                                    self.parent.node.append(self.parent.children[1].node[0])
-                                    self.parent.node.sort()
-                                    del self.parent.children[1].node[0]
+                                    del self.parent.children[0]
+                                    return True
                                 else:
-                                    self.node.clear()
-                                    self.node.append(self.parent.node[0])
+                                    self.parent.children[0].node.append(self.parent.node[0])
+                                    self.parent.children[0].node.sort()
                                     del self.parent.node[0]
-                                    index = len (self.parent.children[0].node)
-                                    self.parent.node.append(self.parent.children[0].node[index-1])
-                                    self.parent.node.sort()
-                                    del self.parent.children[2].node[index-1]
-                                return True
-                        ## Tot Here
+                                    del self.parent.children[1]
+                                    return True
+
+
 
                         elif len(self.parent.node) == 2:
-                             # total of nodes must be min 5, otherwise change to  2-knoop
-                            #total before the delete
+
                             total = len(self.parent.node)
                             for k, citem in enumerate(self.parent.children):
                                 total += len(citem.node)
 
                             if total > 5:
                                 if self.node[0].key < self.parent.node[0].key:
-                                    # 1st Child [0$
+
                                     if len(self.parent.children[1].node) > 1:
-                                        #index = len(self.parent.children[].node)
+
                                         self.node.clear()
                                         self.node.append(self.parent.node[0])
                                         del self.parent.node[0]
@@ -633,15 +611,14 @@ class TwoThreeFourTreeNode:
                                         del self.parent.children[2].node[0]
 
                                 elif self.node[0].key < self.parent.node[1].key:
-                                    # 2nd Child [1]
-                                    if len(self.parent.children[0].node) > 1:
-                                        index = len(self.parent.children[0].node)
+
+                                    if len(self.parent.children[0].node) < 1:
                                         self.node.clear()
                                         self.node.append(self.parent.node[0])
                                         del self.parent.node[0]
-                                        self.parent.node.append(self.parent.children[0].node[index-1])
+                                        self.parent.node.append(self.parent.children[1].node[0])
                                         self.parent.node.sort()
-                                        del self.parent.children[0].node[index-1]
+                                        del self.parent.children[1].node[0]
                                     else:
                                         self.node.clear()
                                         self.node.append(self.parent.node[1])
@@ -650,10 +627,11 @@ class TwoThreeFourTreeNode:
                                         self.parent.node.sort()
                                         del self.parent.children[2].node[0]
                                 else:
-                                    #index = len(self.parent.children[0].node)
+
                                     self.node.clear()
                                     self.node.append(self.parent.node[1])
                                     del self.parent.node[1]
+
                                     if len(self.parent.children[1].node) > 1:
                                         index = len(self.parent.children[1].node)
                                         self.parent.node.append(self.parent.children[1].node[index - 1])
@@ -663,24 +641,24 @@ class TwoThreeFourTreeNode:
                                         self.parent.node.append(self.parent.children[1].node[0])
                                         self.parent.node.sort()
                                         del self.parent.children[1].node[0]
-                                        self.parent.children[1].node.append( self.parent.node[0])
+                                        self.parent.children[1].node.append(self.parent.node[0])
                                         del self.parent.node[0]
                                         index = len(self.parent.children[0].node)
-                                        self.parent.node.append( self.children[0].node[index-1] )
+                                        self.parent.node.append(self.children[0].node[index - 1])
                                         self.parent.node.sort()
-                                        del self.children[0].node[index-1]
+                                        del self.children[0].node[index - 1]
 
                                 return True
-                            else:
-                            # Not possible to have 3knoop annymore,  make a 2-knoop
 
-                                if self.node[0].key< self.parent.node[0].key:
+                            else:
+                                if self.node[0].key < self.parent.node[0].key:
                                     self.parent.children[1].node.append(self.parent.node[0])
                                     self.parent.children[1].node.sort()
                                     del self.parent.node[0]
                                     del self.parent.children[0]
                                     return True
-                                elif self.node[0].key<self.parent.node[1].key :
+
+                                elif self.node[0].key < self.parent.node[1].key:
                                     self.parent.children[0].node.append(self.parent.node[0])
                                     self.parent.children[0].node.sort()
                                     del self.parent.node[0]
@@ -694,9 +672,9 @@ class TwoThreeFourTreeNode:
                                     return True
 
                         elif len(self.parent.node) == 3:
-                            #### TODO
-                            #
+
                             total = len(self.parent.node)
+
                             for k, citem in enumerate(self.parent.children):
                                 total += len(citem.node)
 
@@ -729,8 +707,7 @@ class TwoThreeFourTreeNode:
 
                                 elif self.node[0].key < self.parent.node[1].key:
 
-                                    # 2nd Child [1]
-                                    if len(self.parent.children[0].node)>1:
+                                    if len(self.parent.children[0].node) > 1:
                                         index = len(self.parent.children[0].node)
                                         self.node.clear()
                                         self.node.append(self.parent.node[0])
@@ -739,6 +716,7 @@ class TwoThreeFourTreeNode:
                                         self.parent.node.sort()
                                         del self.parent.children[0].node[index - 1]
                                         return True
+
                                     self.node.clear()
                                     self.node.append(self.parent.node[1])
                                     del self.parent.node[1]
@@ -757,15 +735,21 @@ class TwoThreeFourTreeNode:
 
                                 elif self.node[0].key < self.parent.node[2].key:
 
-                                    # 3rd Child [1]
-                                    if len(self.parent.children[1].node) > 1:
-                                        index = len(self.parent.children[1].node)
+                                    if len(self.parent.children[1].node) < 1:
                                         self.node.clear()
                                         self.node.append(self.parent.node[1])
                                         del self.parent.node[1]
-                                        self.parent.node.append(self.parent.children[1].node[index - 1])
+                                        self.parent.node.append(self.parent.children[2].node[0])
                                         self.parent.node.sort()
-                                        del self.parent.children[1].node[index - 1]
+                                        del self.parent.children[2].node[0]
+                                        if len(self.parent.children[2].node) > 0:
+                                            return True
+
+                                        self.parent.children[2].node.append(self.parent.node[2])
+                                        del self.parent.node[2]
+                                        self.parent.node.append(self.parent.children[3].node[0])
+                                        self.parent.node.sort()
+                                        del self.parent.children[3].node[0]
                                         return True
                                     else:
                                         self.node.clear()
@@ -792,14 +776,14 @@ class TwoThreeFourTreeNode:
                                         self.parent.children[2].node.append(self.parent.node[1])
                                         del self.parent.node[1]
 
-                                        if len ( self.parent.children[1].node)>1:
+                                        if len(self.parent.children[1].node) > 1:
                                             index = len(self.parent.children[1].node)
                                             self.parent.node.append(self.parent.children[1].node[index - 1])
                                             self.parent.node.sort()
                                             del self.parent.children[1].node[index - 1]
                                             return True
                                         else:
-                                            self.parent.node.append( self.parent.children[1].node[0])
+                                            self.parent.node.append(self.parent.children[1].node[0])
                                             self.parent.node.sort()
                                             del self.parent.children[1].node[0]
                                             self.parent.children[1].node.append(self.parent.node[0])
@@ -835,41 +819,66 @@ class TwoThreeFourTreeNode:
                                     del self.parent.children[3]
                                     return True
 
-                #
+
                 else:
-                    # Swap and Delete in Node
-                    # geen blad
+
                     if len(self.node) == 1:
-                        ##
 
-                        ##
-
-                        if len(self.children[0].node)>1:
-                            self.node.clear()
+                        if len(self.children[0].node) > 1:
+                            del self.node[i]
                             index = len(self.children[0].node)
-                            self.node.append(self.children[0].node[index-1])
+                            self.node.append(self.children[0].node[index - 1])
                             self.node.sort()
-                            del self.children[0].node[index-1]
-                        elif len(self.children[1].node)>1:
-                            self.node.clear()
+                            del self.children[0].node[index - 1]
+                            return True
+                        elif len(self.children[1].node) > 1:
+                            del self.node[i]
                             self.node.append(self.children[1].node[0])
                             self.node.sort()
                             del self.children[1].node[0]
+                            return True
                         else:
-                            self.node.clear()
-                            self.node.append(self.children[0].node[0])
-                            self.node.append(self.children[1].node[0])
-                            del self.children[0]
-                            del self.children[1]
-                        return True
-                    elif len(self.node) ==2:
-                        #  I , item gives the index in the node                        #
-                        # 0 for Child 0 or 1
-                        # 1 for Child 1 or 2
+                            total = len(self.node)
+                            for k, citem in enumerate(self.children):
+                                total += len(citem.node)
 
-                        if i==0:
-                            #############
-                            ####Here
+                            if total == 3:
+                                del self.node[i]
+                                if i == 0:
+                                    self.node.append(self.children[0].node[0])
+                                    del self.children[0].node[0]
+                                else:
+                                    self.node.append(self.children[1].node[0])
+                                    del self.children[1].node[0]
+                                return True
+                            else:
+                                del self.node[i]
+                                if i != 0:
+                                    if len(self.children[1].node) > 1:
+                                        index = len(self.children[1].node)
+                                        self.node.append(self.children[1].node[index - 1])
+                                        self.node.sort()
+                                        del self.children[1].node[index - 1]
+                                        self.node.append(self.children[2].node[0])
+                                        self.node.sort()
+                                        del self.children[2].node[0]
+                                        self.children[2].node.append(self.node[1])
+                                        del self.node[1]
+                                        return True
+                                    else:
+                                        self.node.append(self.children[2].node[0])
+                                        self.node.sort()
+                                        del self.children[2].node[0]
+                                        self.children[2].node.append(self.node[1])
+                                        del self.node[1]
+                                        self.node.append(self.children[3].node[0])
+                                        del self.children[3].node[0]
+                                        return True
+
+                    elif len(self.node) == 2:
+
+                        if i == 0:
+
                             if len(self.children[0].node) > 1:
                                 del self.node[i]
                                 index = len(self.children[0].node)
@@ -883,69 +892,64 @@ class TwoThreeFourTreeNode:
                                 self.node.sort()
                                 del self.children[1].node[0]
                                 return True
-                        if i==1:
-                            #############
-                            ####Here
-                            if len(self.children[1].node) > 1:
+
+                        if i == 1:
+                            if len(self.children[1].node) < 1:
                                 del self.node[i]
-                                index = len(self.children[1].node)
-                                self.node.append(self.children[1].node[index - 1])
-                                self.node.sort()
-                                del self.children[1].node[index - 1]
+                                self.node.append(self.children[0].node[0])
+                                del self.children[0].node[0]
                                 return True
+
                             elif len(self.children[2].node) > 1:
                                 del self.node[i]
-                                self.node.append(self.children[2].node[0])
+                                index = len(self.children[2].node)
+                                self.node.append(self.children[2].node[index - 1])
                                 self.node.sort()
-                                del self.children[2].node[0]
+                                del self.children[2].node[index - 1]
                                 return True
-                        # Rearrange everyting
+
                         total = len(self.node)
                         for k, citem in enumerate(self.children):
                             total += len(citem.node)
 
                         if total == 5:
-                            # drop to 2-knoop
-                            # 5-1=4, 4 is not enough 2 have
+
                             del self.node[i]
-                            # merge  1 and 2 children
-                            if i==0:
-                                self.children[0].node.append(self.children[1].node[0])
-                                del self.children[1]
+
+                            if i != 0:
+                                self.node.append(self.children[1].node[0])
+                                del self.children[1].node[0]
                             else:
-                                self.children[1].node.append(self.children[2].node[0])
-                                del self.children[2]
+                                self.node.append(self.children[0].node[0])
+                                del self.children[0].node[0]
                             return True
                         else:
                             del self.node[i]
-                            if i==0:
-                                # Both 0 and 1 Children has only 1 element in node
-                                self.node.append(self.children[1].node[0])
-                                self.node.sort()
-                                self.children[1].node.clear()
-                                self.children[1].node.append(self.node[1])
-                                del self.node[1]
-                                self.node.append( self.children[2].node[0])
-                                del self.children[2].node[0]
-                                return True
-                            else:
-                                # Both 1 and 2 Children has only 1 element in node
-                                self.node.append(self.children[1].node[0])
-                                self.node.sort()
-                                self.children[1].node.clear()
-                                self.children[1].node.append(self.node[0])
-                                del self.node[0]
-                                index= len( self.children[0].node)
-                                self.node.append( self.children[0].node[index-1])
-                                self.node.sort()
-                                del self.children[0].node[index-1]
-                                return True
+                            if i != 0:
+                                if len(self.children[1].node) > 1:
+                                    index = len(self.children[1].node)
+                                    self.node.append(self.children[1].node[index - 1])
+                                    self.node.sort()
+                                    del self.children[1].node[index - 1]
+                                    self.node.append(self.children[2].node[0])
+                                    self.node.sort()
+                                    del self.children[2].node[0]
+                                    self.children[2].node.append(self.node[1])
+                                    del self.node[1]
+                                    return True
+                                else:
+                                    self.node.append(self.children[2].node[0])
+                                    self.node.sort()
+                                    del self.children[2].node[0]
+                                    self.children[2].node.append(self.node[1])
+                                    del self.node[1]
+                                    self.node.append(self.children[3].node[0])
+                                    del self.children[3].node[0]
+                                    return True
+
                     elif len(self.node) == 3:
-                        #  I , item gives the index in the node                        #
-                        # 0 for Child 0 or 1
-                        # 1 for Child 1 or 2
-                        # 2 For Child 2 and 3
-                        if i==0:
+
+                        if i != 0:
                             if len(self.children[0].node) > 1:
                                 del self.node[i]
                                 index = len(self.children[0].node)
@@ -959,8 +963,9 @@ class TwoThreeFourTreeNode:
                                 self.node.sort()
                                 del self.children[1].node[0]
                                 return True
-                        if i==1:
-                            if len(self.children[1].node) > 1:
+
+                        if i == 1:
+                            if len(self.children[1].node) < 1:
                                 del self.node[i]
                                 index = len(self.children[1].node)
                                 self.node.append(self.children[1].node[index - 1])
@@ -973,7 +978,8 @@ class TwoThreeFourTreeNode:
                                 self.node.sort()
                                 del self.children[2].node[0]
                                 return True
-                        if i==2:
+
+                        if i == 2:
                             if len(self.children[2].node) > 1:
                                 del self.node[i]
                                 index = len(self.children[2].node)
@@ -987,20 +993,18 @@ class TwoThreeFourTreeNode:
                                 self.node.sort()
                                 del self.children[3].node[0]
                                 return True
-                        # If it comes here, Rearrange everyting
+
 
                         total = len(self.node)
                         for k, citem in enumerate(self.children):
                             total += len(citem.node)
+
                         if total == 7:
-                            # drop to 3-knoop
-                            # 7-1=6, 6 is not enough to have 3-knoop met 4 children
                             del self.node[i]
-                            # merge  children to -1 Children
-                            if i==0:
+                            if i == 0:
                                 self.children[0].node.append(self.children[1].node[0])
                                 del self.children[1]
-                            elif i==1:
+                            elif i == 1:
                                 self.children[1].node.append(self.children[2].node[0])
                                 del self.children[2]
                             else:
@@ -1009,29 +1013,41 @@ class TwoThreeFourTreeNode:
                             return True
                         else:
                             del self.node[i]
-                            if i==0:
-                                # Both 0 and 1 Children has only 1 element in node
-                                self.node.append(self.children[1].node[0])
-                                self.node.sort()
-                                self.children[1].node.clear()
-                                self.children[1].node.append(self.node[1])
-                                del self.node[1]
-                                self.node.append( self.children[2].node[0])
-                                self.node.sort()
-                                del self.children[2].node[0]
-                                if len( self.children[2].node)>0:
+                            if i != 0:
+                                if len(self.children[1].node) < 1:
+                                    self.node.append(self.children[1].node[0])
+                                    del self.children[1].node[0]
                                     return True
-                                self.children[2].node.append(self.node[2])
-                                del self.node[2]
-                                self.node.append(self.children[3].node[0])
-                                del self.children[3].node[0]
-                                return True
+                                elif len(self.children[2].node) < 1:
+                                    self.node.append(self.children[2].node[0])
+                                    del self.children[2].node[0]
+                                    return True
+                            else:
+                                if len(self.children[0].node) > 1:
+                                    index = len(self.children[0].node)
+                                    self.node.append(self.children[0].node[index - 1])
+                                    self.node.sort()
+                                    del self.children[0].node[index - 1]
+                                    self.node.append(self.children[1].node[0])
+                                    self.node.sort()
+                                    del self.children[1].node[0]
+                                    self.children[1].node.append(self.node[1])
+                                    del self.node[1]
+                                    return True
+                                elif len(self.children[1].node) > 1:
+                                    self.node.append(self.children[1].node[0])
+                                    self.node.sort()
+                                    del self.children[1].node[0]
+                                    self.children[1].node.append(self.node[1])
+                                    del self.node[1]
+                                    self.node.append(self.children[2].node[0])
+                                    del self.children[2].node[0]
+                                    return True
                             if i == 1:
                                 if len(self.children[0].node) > 1:
                                     index = len(self.children[0].node)
-                                    self.node.append(self.children[0].node[index-1])
-                                    del self.children[0].node[index-1]
-                                    #swap children[1].node[0] and self.node[1]
+                                    self.node.append(self.children[0].node[index - 1])
+                                    del self.children[0].node[index - 1]
                                     self.node.append(self.children[1].node[0])
                                     self.node.sort()
                                     del self.children[1].node[0]
@@ -1051,24 +1067,12 @@ class TwoThreeFourTreeNode:
                             else:
                                 self.node.append(self.children[2].node[0])
                                 self.node.sort()
-                                del self.children[2].node[0]
-
-                                self.children[2].node.append(self.node[1])
-                                del self.node[1]
-
-                                self.node.append( self.children[1].node[0])
-                                del self.children[1].node[0]
-                                self.node.sort()
-
-
-                                self.children[1].append (self.node[0])
-                                self.node.sort()
-                                index = len (self.children[0].node)
-                                self.node.append(self.children[0].node[index-1])
-                                del self.children[0].node[index-1]
-                                self.node.sort()
+                                self.children[2].node.clear()
+                                self.children[2].node.append(self.node[2])
+                                del self.node[2]
+                                self.node.append(self.children[3].node[0])
+                                del self.children[3].node[0]
                                 return True
-
 
         if not self.isLeaf():
             for i in range(len(self.node)):
@@ -1077,6 +1081,8 @@ class TwoThreeFourTreeNode:
 
             return self.children[-1].deleteItem(searchKey)
         return False
+
+
 class TwoThreeFourTree:
 
     def __init__(self):
@@ -1089,8 +1095,6 @@ class TwoThreeFourTree:
         """
         self.root = TwoThreeFourTreeNode()
 
-
-
     def isEmpty(self):
         """
         Precondities:
@@ -1100,6 +1104,7 @@ class TwoThreeFourTree:
         - Retourneert True als de boom leeg is, anders retourneert False.
         """
         return self.root.isEmpty()
+
     def insertItem(self, insertTreeItemType):
         """
         Precondities:
@@ -1169,5 +1174,88 @@ class TwoThreeFourTree:
         """
         return self.root.deleteItem(searchKey)
 
+    def split(self):
+
+        """
+        Preconditie:
+        De split-methode wordt opgeroepen op een object van de klasse TwoThreeFourTreeNode.
+
+        Postconditie:
+        Het huidige knooppunt wordt gesplitst in twee knooppunten en de middelste waarde wordt teruggegeven.
+        """
+
+        if len(self.node) == 3:
+            middle = self.node.pop(1)
+            left = TwoThreeFourTreeNode()
+            right = TwoThreeFourTreeNode()
+
+            left.node.append(self.node.pop(0))
+            right.node.append(self.node.pop(0))
+
+            left.children.extend(self.children[:2])
+            right.children.extend(self.children[2:])
+
+            self.node = [middle]
+            self.children = [left, right]
+
+            # Ensure children are set to None if the corresponding root entry is None
+            for i, child in enumerate(self.children):
+                if any(entry is None for entry in left.node + right.node):
+                    self.children[i] = None
+
+            return True
+        else:
+            return False
+
+# t = TwoThreeFourTree()
+# print(t.isEmpty())
+# print(t.insertItem(createTreeItem(8,8)))
+# print(t.insertItem(createTreeItem(5,5)))
+# print(t.insertItem(createTreeItem(10,10)))
+# print(t.insertItem(createTreeItem(15,15)))
+# print(t.isEmpty())
+# print(t.retrieveItem(5)[0])
+# print(t.retrieveItem(5)[1])
+# t.inorderTraverse(print)
+# print(t.save())
+# t.load({'root': [10],'children':[{'root':[5]},{'root':[11]}]})
+# t.insertItem(createTreeItem(15,15))
+# print(t.deleteItem(0))
+# print(t.save())
+# print(t.deleteItem(10))
+# print(t.save())
+# t = TwoThreeFourTree()
+# t.insertItem(createTreeItem(5, 5))
+# t.insertItem(createTreeItem(10, 10))
+# t.insertItem(createTreeItem(2, 2))
+# t.insertItem(createTreeItem(12, 12))
+# t.insertItem(createTreeItem(15, 15))
+# t.insertItem(createTreeItem(1, 1))
+# t.insertItem(createTreeItem(3, 3))
+# t.insertItem(createTreeItem(4, 4))
+# t.insertItem(createTreeItem(16, 16))
+# t.insertItem(createTreeItem(13, 13))
+# t.inorderTraverse(print)
+# print(t.save())
+# t = TwoThreeFourTree()
+# t.insertItem(createTreeItem(5,5))
+# t.insertItem(createTreeItem(10,10))
+# t.insertItem(createTreeItem(2,2))
+# t.insertItem(createTreeItem(12,12))
+# t.insertItem(createTreeItem(15,15))
+# print(t.save())
+# t = TwoThreeFourTree()
+# t.load({'root': [5], 'children': [{'root': [2], 'children': [{'root': [1]}, {'root': [3, 4]}]}, {'root': [12], 'children': [{'root': [10]}, {'root': [13, 15, 16]}]}]})
+# t.deleteItem(13)
+# t.deleteItem(10)
+# t.deleteItem(16)
+# print(t.save())
+# t = TwoThreeFourTree()
+# t.load({'root': [2, 5], 'children': [{'root': [1]}, {'root': [3, 4]}, {'root': [12, 15]}]})
+# t.insertItem(createTreeItem(10,10))
+# t.insertItem(createTreeItem(13,13))
+# t.deleteItem(3)
+# t.deleteItem(5)
+# print(t.save())
 
 
